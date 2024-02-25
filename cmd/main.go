@@ -3,11 +3,19 @@ package main
 import (
 	"github.com/lognitor/entrypoint/configs"
 	"github.com/lognitor/entrypoint/internal/transport/http"
+	"github.com/lognitor/entrypoint/internal/transport/kafka"
 )
 
 func main() {
-	config := configs.NewHttpServer()
-	server, err := http.NewServer(config)
+	httpConfig := configs.NewHttpServer()
+	kafkaConfig, err := configs.NewKafka()
+	if err != nil {
+		panic(err)
+	}
+
+	kw := kafka.GetDefaultWriter(kafkaConfig)
+
+	server, err := http.NewServer(httpConfig, kw)
 	if err != nil {
 		panic(err)
 	}

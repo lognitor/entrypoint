@@ -13,7 +13,7 @@ type Kafka struct {
 
 func NewKafka() (*Kafka, error) {
 	brokers := os.Getenv("KAFKA_BROKERS")
-	if brokers != "" {
+	if brokers == "" {
 		return nil, errors.New("KAFKA_BROKERS is not set")
 	}
 
@@ -31,4 +31,12 @@ func NewKafka() (*Kafka, error) {
 		Brokers: b,
 		Topic:   topic,
 	}, nil
+}
+
+func (k *Kafka) GetBrokers() []string {
+	return k.Brokers
+}
+
+func (k *Kafka) GetTopic() string {
+	return k.Topic
 }

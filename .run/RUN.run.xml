@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RUN" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="entrypoint" />
+    <working_directory value="$PROJECT_DIR$" />
+    <envs>
+      <env name="CGO_ENABLED" value="0" />
+      <env name="KAFKA_BROKERS" value="100.1.0.2:19092" />
+      <env name="KAFKA_TOPIC" value="test" />
+    </envs>
+    <kind value="PACKAGE" />
+    <package value="github.com/lognitor/entrypoint/cmd" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/main.go" />
+    <method v="2" />
+  </configuration>
+</component>

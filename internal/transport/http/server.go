@@ -13,8 +13,8 @@ type Server struct {
 	logger  *slog.Logger
 }
 
-func NewServer(config ConfigInterface) (*Server, error) {
-	h, err := NewHandler()
+func NewServer(config ConfigInterface, kafka KafkaWriterInterface) (*Server, error) {
+	h, err := NewHandler(kafka)
 	if err != nil {
 		return nil, err
 	}
