@@ -1,15 +1,36 @@
 package http
 
+import (
+	"fmt"
+	"github.com/valyala/fasthttp"
+	"log/slog"
+	"os"
+)
+
 type Server struct {
-	config ConfigInterface
+	config  ConfigInterface
+	handler *Handler
+	logger  *slog.Logger
 }
 
 func NewServer(config ConfigInterface) (*Server, error) {
+	h, err := NewHandler()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Server{
-		config: config,
+		config:  config,
+		handler: h,
+		logger:  slog.New(slog.NewTextHandler(os.Stdout, nil)),
 	}, nil
 }
 
+func (s *Server) GetAddress() string {
+	return fmt.Sprintf("%s:%s", s.config.GetAllowIp(), s.config.GetPort())
+}
+
 func (s *Server) Start() error {
-	return nil
+	s.logger.Info(fmt.Sprintf("Server started at %s", s.GetAddress()))
+	return fasthttp.ListenAndServe(fmt.Sprintf("%s:%s", s.config.GetAllowIp(), s.config.GetPort()), s.handler.Handle)
 }
