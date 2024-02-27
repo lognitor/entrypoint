@@ -5,6 +5,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"log/slog"
 	"os"
+	"runtime/debug"
 )
 
 type Handler struct {
@@ -20,7 +21,8 @@ func NewHandler(w KafkaWriterInterface) (*Handler, error) {
 }
 
 func (h *Handler) Handle(ctx *fasthttp.RequestCtx) {
-
+	stk := debug.Stack()
+	fmt.Println(stk)
 	ctx.SetStatusCode(fasthttp.StatusCreated)
 	ctx.SetBodyString("ok")
 }
