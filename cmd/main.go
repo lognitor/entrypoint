@@ -14,8 +14,9 @@ func main() {
 	}
 
 	kw := kafka.GetDefaultWriter(kafkaConfig)
+	ks := kafka.NewKafka(kw)
 
-	server, err := http.NewServer(httpConfig, kw)
+	server, err := http.NewServer(httpConfig, ks)
 	if err != nil {
 		panic(err)
 	}

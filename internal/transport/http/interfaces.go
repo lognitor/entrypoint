@@ -2,7 +2,7 @@ package http
 
 import (
 	"context"
-	"github.com/segmentio/kafka-go"
+	"time"
 )
 
 type ConfigInterface interface {
@@ -11,5 +11,5 @@ type ConfigInterface interface {
 }
 
 type KafkaWriterInterface interface {
-	WriteMessages(ctx context.Context, msgs ...kafka.Message) error
+	WriteMessage(ctx context.Context, key string, message []byte, t time.Time) error
 }
