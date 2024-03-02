@@ -2,9 +2,17 @@ package http
 
 import "context"
 
-type ConfigInterface interface {
+type configPortInterface interface {
 	GetPort() string
+}
+
+type allowIpInterface interface {
 	GetAllowIp() string
+}
+
+type ConfigInterface interface {
+	configPortInterface
+	allowIpInterface
 }
 
 type ServiceInterface interface {

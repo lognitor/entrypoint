@@ -5,13 +5,14 @@ import (
 	"github.com/lognitor/entrypoint/internal/service"
 	"github.com/lognitor/entrypoint/internal/transport/http"
 	"github.com/lognitor/entrypoint/internal/transport/kafka"
+	"log"
 )
 
 func main() {
 	httpConfig := configs.NewHttpServer()
 	kafkaConfig, err := configs.NewKafka()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	kw := kafka.GetDefaultWriter(kafkaConfig)
@@ -21,10 +22,10 @@ func main() {
 
 	server, err := http.NewServer(httpConfig, srv)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	if err := server.Start(); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }

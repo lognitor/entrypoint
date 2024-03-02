@@ -1,9 +1,12 @@
 package configs
 
-import "os"
+import (
+	"os"
+	"strconv"
+)
 
 type HttpServer struct {
-	Port    string `json:"port"`
+	Port    uint16 `json:"port"`
 	AllowIp string `json:"allow_ip"`
 }
 
@@ -18,14 +21,17 @@ func NewHttpServer() *HttpServer {
 		allowIp = "0.0.0.0"
 	}
 
+	// Convert string to uint16
+	portUint, _ := strconv.ParseUint(port, 10, 16)
+
 	return &HttpServer{
-		Port:    port,
+		Port:    uint16(portUint),
 		AllowIp: allowIp,
 	}
 }
 
 func (s *HttpServer) GetPort() string {
-	return s.Port
+	return strconv.FormatInt(int64(s.Port), 10)
 }
 
 func (s *HttpServer) GetAllowIp() string {
