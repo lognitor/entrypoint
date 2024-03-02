@@ -1,15 +1,13 @@
 package http
 
-import (
-	"context"
-	"time"
-)
+import "context"
 
 type ConfigInterface interface {
 	GetPort() string
 	GetAllowIp() string
 }
 
-type KafkaWriterInterface interface {
-	WriteMessage(ctx context.Context, key string, message []byte, t time.Time) error
+type ServiceInterface interface {
+	ValidateRequest(token string, body []byte) error
+	WriteRequest(ctx context.Context, token string, body []byte) error
 }

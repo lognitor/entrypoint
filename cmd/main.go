@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/lognitor/entrypoint/configs"
+	"github.com/lognitor/entrypoint/internal/service"
 	"github.com/lognitor/entrypoint/internal/transport/http"
 	"github.com/lognitor/entrypoint/internal/transport/kafka"
 )
@@ -16,7 +17,9 @@ func main() {
 	kw := kafka.GetDefaultWriter(kafkaConfig)
 	ks := kafka.NewKafka(kw)
 
-	server, err := http.NewServer(httpConfig, ks)
+	srv := service.NewService(ks)
+
+	server, err := http.NewServer(httpConfig, srv)
 	if err != nil {
 		panic(err)
 	}

@@ -1,40 +1,65 @@
 package service
 
+import (
+	"context"
+	"errors"
+	"fmt"
+	"github.com/goccy/go-json"
+	"time"
+)
+
 type Service struct {
+	w KafkaWriterInterface
 }
 
-func NewService() *Service {
-	return &Service{}
+func NewService(w KafkaWriterInterface) *Service {
+	return &Service{
+		w: w,
+	}
 }
 
-func (s *Service) ValidateRequest(key string, body []byte) error {
-	//req := new(Request)
-	//key := ctx.Request.Header.Peek("TOKEN")
-	//
-	//if len(key) == 0 {
-	//	h.error(ctx, fmt.Errorf("token is empty"))
-	//	return
-	//}
-	//
-	//if err := json.Unmarshal(ctx.PostBody(), req); err != nil {
-	//	h.error(ctx, fmt.Errorf("json unmarshal error: %s", err.Error()))
-	//	return
-	//}
-	//
-	//if req.Message == "" || req.Level == "" || req.Prefix == "" {
-	//	h.error(ctx, fmt.Errorf("message is empty"))
-	//	return
-	//}
-	//
-	//if req.Time.IsZero() {
-	//	req.Time = time.Now()
-	//}
-	//
-	//h.kafka.WriteMessage(ctx, string(key), req, req.Time)
+func (s *Service) ValidateRequest(token string, body []byte) error {
+	if token == "" {
+		return errors.New("token is empty")
+	}
+
+	if len(body) == 0 {
+		return errors.New("body is empty")
+	}
+
+	// TODO: Send token for validation to lognitor
+	req := &Request{}
+
+	if err := json.Unmarshal(body, req); err != nil {
+		return fmt.Errorf("json unmarshal error: %s", err.Error())
+	}
+
+	if req.Message == "" || req.Level == "" || req.Prefix == "" {
+		return fmt.Errorf("message, level or prefix is empty")
+	}
 
 	return nil
 }
 
-func (s *Service) WriteRequest(body []byte) error {
+func (s *Service) WriteRequest(ctx context.Context, token string, body []byte) error {
+	req := &Request{}
+
+	if err := json.Unmarshal(body, req); err != nil {
+		return fmt.Errorf("json unmarshal error: %s", err.Error())
+	}
+
+	if req.Time.IsZero() {
+		req.Time = time.Now()
+	}
+
+	b, err := json.Marshal(req)
+	if err != nil {
+		return fmt.Errorf("json marshal error: %s", err.Error())
+	}
+
+	if err := s.w.WriteMessage(ctx, token, b, req.Time); err != nil {
+		return fmt.Errorf("kafka write error: %s", err.Error())
+	}
+
 	return nil
 }
