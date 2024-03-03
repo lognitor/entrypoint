@@ -31,6 +31,6 @@ func (s *Server) GetAddress() string {
 }
 
 func (s *Server) Start() error {
-	s.logger.Info(fmt.Sprintf("Server started at %s", s.GetAddress()))
+	s.logger.Info(fmt.Sprintf("Http server started at %s", s.GetAddress()))
 	return fasthttp.ListenAndServe(fmt.Sprintf("%s:%s", s.config.GetAllowIp(), s.config.GetPort()), s.handler.Handle)
 }

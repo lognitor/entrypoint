@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "internal/transport/grpc";
+
+package grpc;
+
+service Entrypoint {
+  rpc WriteLogSync (PayloadRequest) returns (PayloadReply) {}
+  rpc WriteLogAsync (PayloadRequest) returns (PayloadReply) {}
+}
+
+message PayloadRequest {
+  string Level = 1;
+  string Prefix = 2;
+  string Message = 3;
+  string Lang = 4;
+  string UserAgent = 5;
+  string Trace = 6;
+  string IP = 7;
+  string Time = 8;
+  string Token = 9;
+}
+
+message PayloadReply {
+  string message = 1;
+}
