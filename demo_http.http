@@ -1,0 +1,32 @@
+### HTTP Log Sync
+POST http://127.0.0.1:8080
+Content-Type: application/json
+TOKEN: test
+
+{
+  "level": "INFO",
+  "prefix": "application",
+  "message": "{\"timestamp\": \"2024-02-27T14:30:00Z\",\"level\": \"INFO\",\"logger\": \"com.example.application\",\"message\": \"User successfully logged in\",\"data\": {\"user_id\": \"123456\",\"username\": \"john_doe\",\"ip_address\": \"192.168.1.100\",\"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36\",\"session_duration\": 120,\"additional_info\": {\"browser\": \"Chrome\",\"os\": \"Windows 10\",\"location\": {\"latitude\": 40.7128,\"longitude\": -74.0060}}}}",
+  "time": "2024-03-03T00:00:00.123-00:00",
+  "lang": "golang/1.22.0",
+  "user_agent": "sdk/1.0.0",
+  "trace": "",
+  "ip": "127.0.0.1"
+}
+
+
+### HTTP Log Async
+POST http://127.0.0.1:8080/fast
+Content-Type: application/json
+TOKEN: test
+
+{
+    "level": "INFO",
+    "prefix": "application",
+    "message": "{\"timestamp\": \"2024-02-27T14:30:00Z\",\"level\": \"INFO\",\"logger\": \"com.example.application\",\"message\": \"User successfully logged in\",\"data\": {\"user_id\": \"123456\",\"username\": \"john_doe\",\"ip_address\": \"192.168.1.100\",\"user_agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36\",\"session_duration\": 120,\"additional_info\": {\"browser\": \"Chrome\",\"os\": \"Windows 10\",\"location\": {\"latitude\": 40.7128,\"longitude\": -74.0060}}}}",
+    "time": "2024-03-03T00:00:00.123-00:00",
+    "lang": "golang/1.22.0",
+    "user_agent": "sdk/1.0.0",
+    "trace": "",
+    "ip": "127.0.0.1"
+}
