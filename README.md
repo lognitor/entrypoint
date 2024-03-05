@@ -1,5 +1,14 @@
 ## Entrypoint for write log data to kafka
 
+```shell
+docker run -d --name log-writer \
+    -e KAFKA_BROKERS=
+    -e KAFKA_TOPIC=
+    -p 50051:50051 \
+    -p 8080:8080 \
+    ghcr.io/lognitor/entrypoint:latest
+```
+
 ### Environment variables
 | ENV           | Demo                            | Default | Description               |
 |---------------|---------------------------------|---------|---------------------------|
