@@ -1,5 +1,5 @@
 gen.proto:
-	protoc --go_out=. --go-grpc_out=. proto/*.proto
+	protoc --go_out=pkg/transport --go-grpc_out=pkg/transport proto/*.proto
 
 # IMPORTANT: COMMAND INCLUDE PUSH TO GITHUB
 # Build multiarch image and push to github
