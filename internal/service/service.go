@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/goccy/go-json"
+	"github.com/lognitor/entrypoint/pkg/structs"
 	"time"
 )
 
@@ -28,7 +29,7 @@ func (s *Service) ValidateRequest(token string, body []byte) error {
 	}
 
 	// TODO: Send token for validation to lognitor
-	req := &Request{}
+	req := &structs.Log{}
 
 	if err := json.Unmarshal(body, req); err != nil {
 		return fmt.Errorf("json unmarshal error: %s", err.Error())
@@ -42,7 +43,7 @@ func (s *Service) ValidateRequest(token string, body []byte) error {
 }
 
 func (s *Service) WriteRequest(ctx context.Context, token string, body []byte) error {
-	req := &Request{}
+	req := &structs.Log{}
 
 	if err := json.Unmarshal(body, req); err != nil {
 		return fmt.Errorf("json unmarshal error: %s", err.Error())

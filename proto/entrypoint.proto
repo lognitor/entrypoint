@@ -2,6 +2,9 @@ syntax = "proto3";
 
 option go_package = "grpc/entrypoint";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
 package grpc;
 
 service Entrypoint {
@@ -12,13 +15,26 @@ service Entrypoint {
 message PayloadRequest {
   string Level = 1;
   string Prefix = 2;
-  string Message = 3;
-  string Lang = 4;
-  string UserAgent = 5;
-  string Trace = 6;
-  string IP = 7;
-  string Time = 8;
+  string IP = 3;
+  string Agent = 4;
+  google.protobuf.Any Message = 5;
+  repeated Frame Trace = 6;
+  FrameWithCode Source = 7;
+  google.protobuf.Timestamp Time = 8;
   string Token = 9;
+}
+
+message Frame {
+  string Path = 1;
+  uint32 Line = 2;
+  string Func = 3;
+}
+
+message FrameWithCode {
+  string Path = 1;
+  uint32 Line = 2;
+  string Func = 3;
+  string Code = 4;
 }
 
 message PayloadReply {
