@@ -65,14 +65,12 @@ func (s *Server) Start() error {
 
 func (h *Server) validateAndWrite(payload *PayloadRequest) error {
 	body := map[string]any{
-		"level":      payload.Level,
-		"prefix":     payload.Prefix,
-		"message":    payload.Message,
-		"lang":       payload.Lang,
-		"user_agent": payload.UserAgent,
-		"trace":      payload.Trace,
-		"ip":         payload.IP,
-		"time":       payload.Time, //TODO: correct time parse
+		"level":   payload.Level,
+		"prefix":  payload.Prefix,
+		"message": payload.Message,
+		"trace":   payload.Trace,
+		"ip":      payload.IP,
+		"time":    payload.Time, //TODO: correct time parse
 	}
 
 	b, err := json.Marshal(body)
