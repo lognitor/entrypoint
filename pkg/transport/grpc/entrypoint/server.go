@@ -63,7 +63,7 @@ func (s *Server) Start() error {
 	return grpcServer.Serve(lis)
 }
 
-func (h *Server) validateAndWrite(payload *PayloadRequest) error {
+func (s *Server) validateAndWrite(payload *PayloadRequest) error {
 	body := map[string]any{
 		"level":   payload.Level,
 		"prefix":  payload.Prefix,
@@ -78,11 +78,11 @@ func (h *Server) validateAndWrite(payload *PayloadRequest) error {
 		return err
 	}
 
-	if err := h.srv.ValidateRequest(payload.Token, b); err != nil {
+	if err = s.srv.ValidateRequest(payload.Token, b); err != nil {
 		return err
 	}
 
-	if err := h.srv.WriteRequest(context.Background(), payload.Token, b); err != nil {
+	if err = s.srv.WriteRequest(context.Background(), payload.Token, b); err != nil {
 		return err
 	}
 
