@@ -2,8 +2,9 @@
   <configuration default="false" name="RUN" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="entrypoint" />
     <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-race" />
     <envs>
-      <env name="CGO_ENABLED" value="0" />
+      <env name="CGO_ENABLED" value="1" />
       <env name="KAFKA_BROKERS" value="100.1.0.2:19092" />
       <env name="KAFKA_TOPIC" value="test" />
     </envs>
