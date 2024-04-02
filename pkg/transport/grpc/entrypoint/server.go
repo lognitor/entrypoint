@@ -27,7 +27,7 @@ func NewServer(config ConfigInterface, srv ServiceInterface) *Server {
 	}
 }
 
-func (s *Server) WriteLogSync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
+func (s *Server) WriteLogSync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
 	if err := s.validateAndWrite(in); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -37,7 +37,7 @@ func (s *Server) WriteLogSync(ctx context.Context, in *PayloadRequest) (*Payload
 	}, nil
 }
 
-func (s *Server) WriteLogAsync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
+func (s *Server) WriteLogAsync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
 	go func(srv *Server) {
 		if err := s.validateAndWrite(in); err != nil {
 			srv.logger.Error(fmt.Sprintf("Handler error: %s", err.Error()))
