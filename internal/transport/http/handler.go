@@ -28,7 +28,7 @@ func (h *Handler) Handle(ctx *fasthttp.RequestCtx) {
 	}
 
 	body := ctx.PostBody()
-	token := ctx.Request.Header.Peek("TOKEN")
+	token := ctx.Request.Header.Peek("X-TOKEN")
 	action := ctx.Request.URI().LastPathSegment()
 
 	if string(action) == "fast" {

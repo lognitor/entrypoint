@@ -27,8 +27,8 @@ func NewServer(config ConfigInterface, srv ServiceInterface) *Server {
 	}
 }
 
-func (s *Server) WriteLogSync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
-	if err := s.validateAndWrite(in); err != nil {
+func (s *Server) WriteLogSync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
+	if err := s.validateAndWrite(ctx, in); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -37,9 +37,9 @@ func (s *Server) WriteLogSync(_ context.Context, in *PayloadRequest) (*PayloadRe
 	}, nil
 }
 
-func (s *Server) WriteLogAsync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
+func (s *Server) WriteLogAsync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
 	go func(srv *Server) {
-		if err := s.validateAndWrite(in); err != nil {
+		if err := s.validateAndWrite(ctx, in); err != nil {
 			srv.logger.Error(fmt.Sprintf("Handler error: %s", err.Error()))
 		}
 	}(s)
@@ -63,7 +63,7 @@ func (s *Server) Start() error {
 	return grpcServer.Serve(lis)
 }
 
-func (s *Server) validateAndWrite(payload *PayloadRequest) error {
+func (s *Server) validateAndWrite(ctx context.Context, payload *PayloadRequest) error {
 	body := map[string]any{
 		"level":   payload.Level,
 		"prefix":  payload.Prefix,
@@ -82,7 +82,7 @@ func (s *Server) validateAndWrite(payload *PayloadRequest) error {
 		return err
 	}
 
-	if err = s.srv.WriteRequest(context.Background(), payload.Token, b); err != nil {
+	if err = s.srv.WriteRequest(ctx, payload.Token, b); err != nil {
 		return err
 	}
 
