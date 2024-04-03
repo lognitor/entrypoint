@@ -69,6 +69,7 @@ func (s *Server) validateAndWrite(ctx context.Context, payload *PayloadRequest) 
 		"prefix":  payload.Prefix,
 		"message": payload.Message,
 		"trace":   payload.Trace,
+		"source":  payload.Source,
 		"ip":      payload.IP,
 		"time":    payload.Time, //TODO: correct time parse
 	}
