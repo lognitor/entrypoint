@@ -33,7 +33,7 @@ message FrameWithCode {
   string Path = 1;
   uint32 Line = 2;
   string Func = 3;
-  string Code = 4;
+  repeated string Code = 4;
 }
 
 message PayloadReply {
