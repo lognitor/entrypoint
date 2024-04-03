@@ -6,7 +6,7 @@
     <envs>
       <env name="CGO_ENABLED" value="1" />
       <env name="KAFKA_BROKERS" value="100.1.0.2:19092" />
-      <env name="KAFKA_TOPIC" value="test" />
+      <env name="KAFKA_TOPIC" value="log.request" />
     </envs>
     <kind value="PACKAGE" />
     <package value="github.com/lognitor/entrypoint/cmd" />
