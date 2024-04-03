@@ -58,7 +58,7 @@ func (s *Service) WriteRequest(ctx context.Context, token string, body []byte) e
 		return fmt.Errorf("json marshal error: %s", err.Error())
 	}
 
-	if err := s.w.WriteMessage(ctx, token, b, req.Time); err != nil {
+	if err = s.w.WriteMessage(ctx, token, b, req.Time); err != nil {
 		return fmt.Errorf("kafka write error: %s", err.Error())
 	}
 
