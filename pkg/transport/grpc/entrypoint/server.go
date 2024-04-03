@@ -10,6 +10,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"time"
 )
 
 type Server struct {
@@ -27,7 +28,10 @@ func NewServer(config ConfigInterface, srv ServiceInterface) *Server {
 	}
 }
 
-func (s *Server) WriteLogSync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
+func (s *Server) WriteLogSync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
 	if err := s.validateAndWrite(ctx, in); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
@@ -37,8 +41,11 @@ func (s *Server) WriteLogSync(ctx context.Context, in *PayloadRequest) (*Payload
 	}, nil
 }
 
-func (s *Server) WriteLogAsync(ctx context.Context, in *PayloadRequest) (*PayloadReply, error) {
+func (s *Server) WriteLogAsync(_ context.Context, in *PayloadRequest) (*PayloadReply, error) {
 	go func(srv *Server) {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+		defer cancel()
+
 		if err := s.validateAndWrite(ctx, in); err != nil {
 			srv.logger.Error(fmt.Sprintf("Handler error: %s", err.Error()))
 		}
