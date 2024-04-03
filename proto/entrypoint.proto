@@ -16,7 +16,7 @@ message PayloadRequest {
   string Prefix = 2;
   string IP = 3;
   string Agent = 4;
-  bytes Message = 5;
+  string Message = 5;
   repeated Frame Trace = 6;
   FrameWithCode Source = 7;
   google.protobuf.Timestamp Time = 8;
