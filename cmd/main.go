@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/lognitor/entrypoint/configs"
 	"github.com/lognitor/entrypoint/internal/service"
 	"github.com/lognitor/entrypoint/internal/transport/http"
@@ -41,6 +40,4 @@ func main() {
 	}(grpcServer, ch)
 
 	log.Fatal(<-ch)
-
-	fmt.Println("test")
 }
