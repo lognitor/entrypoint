@@ -3,7 +3,7 @@ name: Update containers
 on:
   push:
     branches:
-      - "main"
+      - "master"
 
 jobs:
   docker:
