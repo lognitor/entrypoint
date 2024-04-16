@@ -5,6 +5,7 @@ go 1.21.4
 toolchain go1.22.1
 
 require (
+	github.com/ClickHouse/clickhouse-go/v2 v2.23.1
 	github.com/goccy/go-json v0.10.2
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/valyala/fasthttp v1.52.0
@@ -14,7 +15,6 @@ require (
 
 require (
 	github.com/ClickHouse/ch-go v0.61.5 // indirect
-	github.com/ClickHouse/clickhouse-go/v2 v2.23.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/go-faster/city v1.0.1 // indirect
 	github.com/go-faster/errors v0.7.1 // indirect

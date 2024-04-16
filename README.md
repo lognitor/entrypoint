@@ -28,10 +28,8 @@ docker run -d --name log-writer \
     -e CLICKHOUSE_PASSWORD=<>
     -e CLICKHOUSE_DATABASE=<>
     ghcr.io/lognitor/entrypoint:latest \
-    /app/worker -p 1
+    /app/worker
 ```
-
-`-p or --partition` - number partition for kafka topic
 
 ### Entrypoint service
 
