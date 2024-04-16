@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WORKER-2" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="entrypoint" />
+    <working_directory value="$PROJECT_DIR$" />
+    <envs>
+      <env name="CGO_ENABLED" value="0" />
+      <env name="CLICKHOUSE_DATABASE" value="worker" />
+      <env name="CLICKHOUSE_HOSTS" value="100.1.0.50:9000" />
+      <env name="CLICKHOUSE_PASSWORD" value="tipira21" />
+      <env name="CLICKHOUSE_USER" value="worker" />
+      <env name="KAFKA_BROKERS" value="100.1.0.2:19092" />
+      <env name="KAFKA_TOPIC" value="log.request" />
+    </envs>
+    <kind value="PACKAGE" />
+    <package value="github.com/lognitor/entrypoint/cmd/worker" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/main.go" />
+    <method v="2" />
+  </configuration>
+</component>
