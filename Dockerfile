@@ -9,7 +9,8 @@ WORKDIR /app
 COPY . /app
 
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /entrypoint cmd/main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /entrypoint cmd/entrypoint/main.go
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /worker cmd/worker/main.go
 
 
 FROM --platform=$BUILDPLATFORM alpine:latest
@@ -19,5 +20,6 @@ FROM --platform=$BUILDPLATFORM alpine:latest
 WORKDIR /app
 
 COPY --from=build /entrypoint /app/entrypoint
+COPY --from=build /worker /app/worker
 
 CMD ["/app/entrypoint"]

@@ -6,17 +6,17 @@ import (
 	"time"
 )
 
-type Kafka struct {
+type Producer struct {
 	writer *kafka.Writer
 }
 
-func NewKafka(writer *kafka.Writer) *Kafka {
-	return &Kafka{
+func NewProducer(writer *kafka.Writer) *Producer {
+	return &Producer{
 		writer: writer,
 	}
 }
 
-func (k *Kafka) WriteMessage(ctx context.Context, key string, message []byte, t time.Time) error {
+func (k *Producer) WriteMessage(ctx context.Context, key string, message []byte, t time.Time) error {
 	return k.writer.WriteMessages(ctx, kafka.Message{
 		Key:   []byte(key),
 		Value: message,
@@ -24,7 +24,7 @@ func (k *Kafka) WriteMessage(ctx context.Context, key string, message []byte, t 
 	})
 }
 
-func GetDefaultWriter(config ConfigInterface) *kafka.Writer {
+func GetDefaultProducer(config ConfigInterface) *kafka.Writer {
 	return &kafka.Writer{
 		Addr:                   kafka.TCP(config.GetBrokers()...),
 		Topic:                  config.GetTopic(),

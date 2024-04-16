@@ -17,8 +17,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	kw := kafka.GetDefaultWriter(kafkaConfig)
-	ks := kafka.NewKafka(kw)
+	kw := kafka.GetDefaultProducer(kafkaConfig)
+	ks := kafka.NewProducer(kw)
 
 	srv := service.NewService(ks)
 
