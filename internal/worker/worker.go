@@ -10,6 +10,7 @@ import (
 type Worker struct {
 	clickhouse *ch.CH
 	consumer   kafka.ConsumerInterface
+	batch      map[string]Batch //TODO: add remove batch
 }
 
 func NewWorker(ch *ch.CH, c kafka.ConsumerInterface) *Worker {
