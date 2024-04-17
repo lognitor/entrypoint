@@ -58,14 +58,18 @@ func (b *Batch) work() {
 
 	for {
 		if b.GetDuration() <= 0 {
+			b.mu.Lock()
 			b.flush()
+			b.mu.Unlock()
 		}
 
 		if b.GetCount() >= b.maxLength {
+			b.mu.Lock()
 			b.flush()
+			b.mu.Unlock()
 		}
 
-		time.Sleep(time.Microsecond * 100)
+		time.Sleep(time.Millisecond * 100)
 	}
 }
 

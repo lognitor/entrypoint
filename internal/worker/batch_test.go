@@ -40,4 +40,9 @@ func TestBatch_Add(t *testing.T) {
 		t.Fatalf("batch count should be 0, but %d", batch.GetCount())
 	}
 
+	time.Sleep(time.Second * 2)
+	if batch.GetCount() != 0 {
+		t.Fatalf("batch count should be 0, but %d", batch.GetCount())
+	}
+
 }
