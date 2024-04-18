@@ -1,7 +1,7 @@
 package worker
 
 import (
-	"github.com/lognitor/entrypoint/internal/worker/models"
+	"github.com/lognitor/entrypoint/pkg/structs"
 	"sync"
 	"time"
 )
@@ -11,31 +11,35 @@ type Batch struct {
 	lastUpdate time.Time
 	maxLength  int
 	token      string
-	batch      []models.Log
+	batch      []structs.Log
 	mu         sync.Mutex
+	out        chan<- []structs.Log
 }
 
-func CreateBatch(token string, maxDebounce time.Duration, maxLen int) (*Batch, error) {
+func CreateBatch(token string, debounce time.Duration, maxLen int) (*Batch, chan []structs.Log, error) {
 	// TODO: Check exists token
+	ch := make(chan []structs.Log)
+
 	b := Batch{
-		debounce:   maxDebounce,
+		debounce:   debounce,
 		token:      token,
 		maxLength:  maxLen,
 		lastUpdate: time.Now(),
-		batch:      make([]models.Log, 0, maxLen),
+		out:        ch,
+		batch:      make([]structs.Log, 0, maxLen),
 	}
 
 	go b.work()
 
-	return &b, nil
+	return &b, ch, nil
 }
 
-func (b *Batch) Add(log models.Log) {
+func (b *Batch) Add(log structs.Log) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	if len(b.batch) >= b.maxLength {
-		b.flush()
+		b.flush() //TODO
 	}
 
 	b.batch = append(b.batch, log)
@@ -50,6 +54,10 @@ func (b *Batch) GetDuration() time.Duration {
 	return b.debounce - time.Now().Sub(b.lastUpdate)
 }
 
+// TODO: Dev
+func (b *Batch) Close() {
+	close(b.out)
+}
 func (b *Batch) work() {
 	// TODO: Add close worker from timeout
 	//if b.GetDuration() > time.Minute*-15 {
@@ -59,13 +67,13 @@ func (b *Batch) work() {
 	for {
 		if b.GetDuration() <= 0 {
 			b.mu.Lock()
-			b.flush()
+			b.flush() //TODO:
 			b.mu.Unlock()
 		}
 
 		if b.GetCount() >= b.maxLength {
 			b.mu.Lock()
-			b.flush()
+			b.flush() //TODO:
 			b.mu.Unlock()
 		}
 
@@ -73,13 +81,14 @@ func (b *Batch) work() {
 	}
 }
 
-func (b *Batch) flush() {
+func (b *Batch) flush() error {
 	if len(b.batch) == 0 {
-		return
+		return nil
 	}
-	// TODO: Send models
 
-	b.batch = make([]models.Log, 0, b.maxLength)
+	b.out <- b.batch
+
+	b.batch = make([]structs.Log, 0, b.maxLength)
 	b.lastUpdate = time.Now()
-	return
+	return nil
 }

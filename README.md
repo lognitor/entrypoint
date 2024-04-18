@@ -43,4 +43,6 @@ docker run -d --name log-writer \
     -p 8080:8080 \
     ghcr.io/lognitor/entrypoint:latest
 ```
-
+### TODO
+- [ ] - [Worker] Drop unused batches
+- [ ] - [Worker] Check exists token
