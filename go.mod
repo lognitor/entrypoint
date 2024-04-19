@@ -5,8 +5,8 @@ go 1.21.4
 toolchain go1.22.1
 
 require (
+	github.com/ClickHouse/clickhouse-go v1.5.4
 	github.com/ClickHouse/clickhouse-go/v2 v2.23.1
-	github.com/doug-martin/goqu/v9 v9.19.0
 	github.com/goccy/go-json v0.10.2
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/segmentio/kafka-go v0.4.47
@@ -17,7 +17,6 @@ require (
 
 require (
 	github.com/ClickHouse/ch-go v0.61.5 // indirect
-	github.com/ClickHouse/clickhouse-go v1.5.4 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58 // indirect
 	github.com/go-faster/city v1.0.1 // indirect

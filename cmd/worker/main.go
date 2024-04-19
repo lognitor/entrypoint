@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/lognitor/entrypoint/configs"
 	"github.com/lognitor/entrypoint/internal/database/ch"
 	"github.com/lognitor/entrypoint/internal/transport/kafka"
@@ -33,7 +34,7 @@ func main() {
 	defer clickhouse.Conn.Close()
 
 	// init worker
-	w := worker.NewWorker(clickhouse, consumer)
+	w := worker.NewWorker(context.TODO(), clickhouse, consumer)
 	defer w.Close()
 
 	log.Fatalln(w.Run())
