@@ -5,18 +5,20 @@ import (
 	"fmt"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	"github.com/goccy/go-json"
+	"github.com/google/uuid"
 	"github.com/lognitor/entrypoint/internal/database/ch"
 	"github.com/lognitor/entrypoint/internal/transport/kafka"
 	"github.com/lognitor/entrypoint/pkg/structs"
 	gKafka "github.com/segmentio/kafka-go"
 	"log"
+	"strconv"
 	"sync"
 	"time"
 )
 
 const (
 	defaultDebounce  = time.Second * 3
-	defaultBatchSize = 100
+	defaultBatchSize = 1000
 	defaultTableName = "log_request"
 )
 
@@ -24,7 +26,7 @@ type Worker struct {
 	clickhouse *ch.CH
 	consumer   kafka.ConsumerInterface
 	lastUpdate time.Time
-	mu         sync.Mutex
+	mu         sync.RWMutex
 	ctx        context.Context
 	batch      driver.Batch
 	processing bool // batch send in processing
@@ -55,6 +57,7 @@ func (w *Worker) Run() error {
 
 		if err := w.handleMessage(m); err != nil {
 			log.Printf("cannot handle message: %v", err)
+			return err
 		}
 	}
 }
@@ -65,26 +68,33 @@ func (w *Worker) watcher() {
 			continue
 		}
 
+		w.mu.RLock()
 		d := time.Now().Sub(w.lastUpdate)
 		l := w.batch.Rows()
+		w.mu.RUnlock()
 
-		if d < defaultDebounce {
-			log.Println("[INFO] Batch send from debounce", d, l)
+		if d > defaultDebounce && l != 0 {
+			start := time.Now()
 			err := w.sendBatch()
 			if err != nil {
 				log.Printf("[ERROR] Cannot send batch: %v", err)
 			}
+			log.Println("[INFO] Batch send from debounce", d, l, time.Now().Sub(start))
+
+			w.update()
 		}
 
 		if l >= defaultBatchSize {
-			log.Println("[INFO] Batch send from size", d, l)
+			start := time.Now()
 			err := w.sendBatch()
 			if err != nil {
 				log.Printf("[ERROR] Cannot send batch: %v", err)
 			}
+			log.Println("[INFO] Batch send from size", d, l, time.Now().Sub(start))
+			w.update()
 		}
 
-		time.Sleep(time.Millisecond * 500)
+		<-time.After(time.Millisecond * 100)
 	}
 }
 
@@ -109,12 +119,13 @@ func (w *Worker) sendBatch() error {
 		return err
 	}
 
-	w.update()
 	w.initNewBatch()
 	return nil
 }
 
 func (w *Worker) update() {
+	w.mu.RLock()
+	defer w.mu.RUnlock()
 	w.lastUpdate = time.Now()
 }
 
@@ -131,7 +142,43 @@ func (w *Worker) handleMessage(m gKafka.Message) error {
 		return err
 	}
 
-	w.update()
+	ip := l.IP
+	if ip == "" {
+		ip = "0.0.0.0"
+	}
+
+	source := ""
+	sb, err := json.Marshal(l.Source)
+	if err == nil {
+		source = string(sb)
+	}
+
+	trace := make([]map[string]string, len(l.Trace))
+	for i, t := range l.Trace {
+		trace[i] = map[string]string{
+			"func": t.Func,
+			"path": t.Path,
+			"line": strconv.Itoa(t.Line),
+		}
+	}
+
+	err = w.batch.Append(uuid.NewString(),
+		token,
+		"text/plain", // todo: detect
+		l.Level,
+		l.Prefix,
+		ip,
+		l.Agent,
+		l.Message,
+		trace,
+		source,
+		l.Time,
+	)
+	if err != nil {
+		return err
+	}
+
+	//w.update()
 
 	return nil
 }

@@ -2,6 +2,7 @@
   <configuration default="false" name="WORKER-2" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="entrypoint" />
     <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-race" />
     <envs>
       <env name="CGO_ENABLED" value="0" />
       <env name="CLICKHOUSE_DATABASE" value="worker" />

@@ -14,4 +14,4 @@ create table if not exists log_request
 )
     engine = MergeTree()
         PRIMARY KEY id
-        PARTITION BY token
+        PARTITION BY toYYYYMM(created_at)

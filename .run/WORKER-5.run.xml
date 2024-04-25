@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="WORKER-1" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="WORKER-5" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="entrypoint" />
     <working_directory value="$PROJECT_DIR$" />
     <go_parameters value="-race" />
